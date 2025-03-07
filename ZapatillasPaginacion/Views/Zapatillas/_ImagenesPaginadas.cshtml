@@ -1,0 +1,11 @@
+﻿@model List<ImagenesZapasPractica>
+
+@if (Model != null && Model.Any())
+{
+    <img src="@Model.First().Imagen" alt="Imagen de producto"
+         style="width: 300px; height: auto; border-radius: 5px;">
+}
+else
+{
+    <p>No hay imágenes disponibles.</p>
+}

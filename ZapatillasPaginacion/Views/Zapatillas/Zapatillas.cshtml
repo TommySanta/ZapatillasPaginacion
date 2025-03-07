@@ -1,0 +1,38 @@
+﻿@model List<Zapatilla>
+
+@{
+    ViewData["Title"] = "Zapatillas";
+}
+
+<h1>Zapatillas</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nombre
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Nombre
+                </td>
+                <td>
+                    <a asp-controller="Zapatillas"
+                       asp-action="Details"
+                       asp-route-id="@item.IdProducto"
+                       class="btn btn-info">
+                        Details
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

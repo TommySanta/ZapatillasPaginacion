@@ -1,0 +1,54 @@
+﻿@model Zapatilla
+
+@{
+    ViewData["Title"] = "Detalles de " + Model.Nombre;
+}
+
+<h1>@Model.Nombre</h1>
+<p>@Model.Descripcion</p>
+<p><strong>Precio:</strong> @Model.Precio €</p>
+
+<p id="imageCount">Imagen 1 de @ViewData["TotalImagenes"]</p>
+
+<button onclick="cambiarPagina('first')">Primero</button>
+<button onclick="cambiarPagina('prev')">Anterior</button>
+<button onclick="cambiarPagina('next')">Siguiente</button>
+<button onclick="cambiarPagina('last')">Último</button>
+
+<h3>Imágenes</h3>
+<div id="imagenContainer">
+    @await Html.PartialAsync("_ImagenesPaginadas", Model.Imagenes)
+</div>
+
+<a class="nav-link text-dark" asp-area=""
+   asp-controller="Zapatillas" asp-action="Zapatillas">Volver</a>
+@section Scripts {
+    <script>
+        let currentPage = 1;
+        let totalImages = @ViewData["TotalImagenes"];
+        let imagesPerPage = 1;
+
+        function cambiarPagina(direccion) {
+            if (direccion === 'first') {
+                currentPage = 1;
+            }else if (direccion === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (direccion === 'next' && currentPage < Math.ceil(totalImages / imagesPerPage)) {
+                currentPage++;
+            }else if (direccion === 'last') {
+                currentPage = Math.ceil(totalImages / imagesPerPage);
+            }
+
+            currentPage = Math.max(1, Math.min(currentPage, Math.ceil(totalImages / imagesPerPage)));
+
+            $.ajax({
+                url: '@Url.Action("GetImagenes", "Zapatillas")',
+                data: { idProducto: @Model.IdProducto, pageNumber: currentPage },
+                success: function (data) {
+                    $("#imagenContainer").html(data);
+                    $("#imageCount").text("Imagen " + currentPage + " de " + totalImages);
+                }
+            });
+        }
+    </script>
+}
